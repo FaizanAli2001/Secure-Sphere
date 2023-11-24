@@ -1,0 +1,491 @@
+// Importing the Flutter material library
+import 'package:flutter/material.dart';
+
+// Entry point of the application
+void main() {
+  runApp(MyApp());
+}
+
+// Main application widget
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      // Set the home page to SignUpPage
+      home: SignUpPage(),
+      // Define named routes for navigation
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => SignUpPage(),
+        '/home': (context) => HomePage(),
+      },
+    );
+  }
+}
+
+// SignUpPage widget for user registration
+class SignUpPage extends StatelessWidget {
+  // Controllers for email and password input fields
+  final TextEditingController signUpEmailController = TextEditingController();
+  final TextEditingController signUpPasswordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('SecureSphere ')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Title for the SignUpPage
+            Text(
+              'Sign Up for SecureSphere',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Email input field
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: signUpEmailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            // Password input field
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: signUpPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+            ),
+            // Button for user registration
+            ElevatedButton(
+              onPressed: () {
+                // Check sign-up credentials (add your validation logic here)
+                if (signUpEmailController.text.isNotEmpty &&
+                    signUpPasswordController.text.isNotEmpty) {
+                  // Assume sign-up is successful for simplicity
+                  Navigator.pushReplacementNamed(context, '/login');
+                } else {
+                  // Show an error message if sign-up fields are empty
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Please fill in all sign-up fields.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: Text('Sign Up'),
+            ),
+            SizedBox(height: 16),
+            // Button to navigate to the login page
+            TextButton(
+              onPressed: () {
+                // Navigate to the Sign In page
+                Navigator.pushNamed(context, '/login');
+              },
+              child: Text('Already have an account? Sign In'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// LoginPage widget for user login
+class LoginPage extends StatelessWidget {
+  // Controllers for email and password input fields
+  final TextEditingController loginEmailController = TextEditingController();
+  final TextEditingController loginPasswordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('SecureSphere')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Title for the LoginPage
+            Text(
+              'Welcome to SecureSphere',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // Email input field
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: loginEmailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            // Password input field
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: loginPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+            ),
+            // Button for user login
+            ElevatedButton(
+              onPressed: () {
+                // Check login credentials (add your authentication logic here)
+                if (loginEmailController.text.isNotEmpty &&
+                    loginPasswordController.text.isNotEmpty) {
+                  // Assume login is successful for simplicity
+                  Navigator.pushReplacementNamed(context, '/home');
+                } else {
+                  // Show an error message if login fields are empty
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Please fill in all login fields.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: Text('Login'),
+            ),
+            SizedBox(height: 10),
+            // Button to navigate to the signup page
+            TextButton(
+              onPressed: () {
+                // Navigate to the signup page
+                Navigator.pushNamed(context, '/signup');
+              },
+              child: Text('Sign Up'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Custom BottomNavigationBar widget
+class MyBottomNavigationBar extends StatelessWidget {
+  final int currentIndex;
+  final void Function(int) onTap;
+
+  MyBottomNavigationBar({required this.currentIndex, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications),
+          label: 'Notifications',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Settings',
+        ),
+      ],
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+      currentIndex: currentIndex,
+      onTap: onTap,
+    );
+  }
+}
+
+// HomePage widget for the main application screen
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+// State class for HomePage widget
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _onBottomNavTapped(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  String _getAppBarTitle(int index) {
+    switch (index) {
+      case 0:
+        return 'Home';
+      case 1:
+        return 'Notifications';
+      case 2:
+        return 'Profile';
+      case 3:
+        return 'Settings';
+      default:
+        return 'SecureSphere';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_getAppBarTitle(_currentIndex)),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Display live camera view only on the Home page
+          if (_currentIndex == 0)
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                child: Text(
+                  'Live camera view',
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+            ),
+          // PageView to navigate between different pages
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: _onPageChanged,
+              children: [
+                Container(), // Placeholder for the first page (Live camera view)
+                NotificationPage(),
+                ProfilePage(),
+                SettingsPage(),
+              ],
+            ),
+          ),
+        ],
+      ),
+      // Custom BottomNavigationBar
+      bottomNavigationBar: MyBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onBottomNavTapped,
+      ),
+    );
+  }
+}
+
+// NotificationPage widget to display notifications
+class NotificationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(
+          'No notifications found',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ProfilePage widget to display user profile information
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+// State class for ProfilePage widget
+class _ProfilePageState extends State<ProfilePage> {
+  String? selectedGender;
+
+  // Function to handle user logout
+  void _handleLogOut() {
+    // Add your log out logic here
+    // For example, you might want to navigate back to the login page
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Display user profile picture with edit button
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage('assets/profile_picture.jpg'),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      // Add functionality to edit picture
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            // Display user information
+            Text(
+              'Faizan Ali',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Email: faizyali750@gmail.com',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Mobile: 03095590082',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 5),
+            // Radio buttons for selecting gender
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Gender: ',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Radio<String>(
+                      value: 'Male',
+                      groupValue: selectedGender,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGender = value;
+                        });
+                      },
+                    ),
+                    Text('Male'),
+                    Radio<String>(
+                      value: 'Female',
+                      groupValue: selectedGender,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGender = value;
+                        });
+                      },
+                    ),
+                    Text('Female'),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            // Button to log out
+            ElevatedButton(
+              onPressed: _handleLogOut,
+              child: Text('Log Out'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// SettingsPage widget to display application settings
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Settings ',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
